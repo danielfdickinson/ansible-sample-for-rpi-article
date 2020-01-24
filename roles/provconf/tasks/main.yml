@@ -1,0 +1,26 @@
+---
+- name: Install network boot and install packages
+  tags:
+    - install_packages
+    - packages
+    - oneoff
+  become: yes
+  apt:
+    name:
+      - lighttpd
+      - lighttpd-doc
+      - nbd-server
+      - tftpd-hpa
+    state: present
+
+- name: Install Ansible control environment
+  become: yes
+  tags:
+    - install_packages
+    - packages
+    - oneoff
+    - ansible_editing
+    - ansible_testing
+    - ssh
+- import_tasks: ansible_user.yml
+  when: include_ansible_control_environment

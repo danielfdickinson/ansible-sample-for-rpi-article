@@ -1,0 +1,5 @@
+---
+os_family_major_desktop_groups:
+  - netdev
+
+os_family_major_groups: []

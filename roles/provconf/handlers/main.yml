@@ -1,0 +1,32 @@
+---
+- name: Set permissions on ansible control user dir files (if different)
+  become: yes
+  tags:
+    - ansible_user
+    - ansible_control
+    - file_dir_ownership
+  file:
+    path: "{{ ansible_control_user_home }}"
+    state: directory
+    owner: "{{ ansible_control_user_name }}"
+    group: "{{ ansible_control_user_name }}"
+    follow: no
+    recurse: yes
+
+- name: Copy files from ansible control user dir under /home to new (if different)
+  become: yes
+  tags:
+    - ansible_user
+    - ansible_control
+    - file_dir_move
+  copy:
+    dest: "{{ ansible_control_user_home }}/"
+    state: directory
+    owner: "{{ ansible_control_user_name }}"
+    group: "{{ ansible_control_user_name }}"
+    follow: no
+    mode: preserve
+    src: "/home/{{ ansible_control_user_name }}"
+  when: ( ansible_control_user_old_home is directory ) and not ( ansible_control_user_old_home is same_file(ansible_control_user_home) )
+  notify:
+    - Set permissions on ansible control user dir files (if different)

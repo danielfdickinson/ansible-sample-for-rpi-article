@@ -1,0 +1,13 @@
+---
+- name: Install important admin tools for ansible
+  become: yes
+  tags:
+    - class_os_family_debian
+    - install_packages
+    - packages
+  apt:
+    name:
+      - aptitude
+      - rsync
+      - unattended-upgrades
+    state: present

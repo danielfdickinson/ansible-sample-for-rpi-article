@@ -1,0 +1,6 @@
+---
+admin_groups:
+  - sudo
+  - adm
+  - staff
+  - operator

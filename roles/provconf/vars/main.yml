@@ -1,0 +1,7 @@
+---
+ansible_control_groups:
+  - adm
+  - staff
+  - operator
+
+ansible_control_user_old_home: '/home/{{ ansible_control_user_name }}'

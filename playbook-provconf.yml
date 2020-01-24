@@ -1,0 +1,18 @@
+---
+- import_playbook: playbook-common.yml
+
+- hosts: provconf
+  gather_facts: False
+  tags:
+    - oneoff
+  roles:
+    - provconf
+    - ansible_config
+    - common
+    - role: sh_user
+      when: sh_users is defined
+    - role: termulti
+      when: termulti_users is defined
+    - role: cli_editing
+      when: cli_editor_users is defined
+

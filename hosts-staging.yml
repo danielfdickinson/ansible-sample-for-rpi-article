@@ -1,0 +1,9 @@
+---
+all:
+  children:
+     provconf:
+       hosts:
+         raspshorian.example.com
+     resources_low:
+       hosts:
+         raspshorian.example.com

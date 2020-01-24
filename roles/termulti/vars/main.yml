@@ -1,0 +1,48 @@
+---
+termulti_choices:
+  - byobu
+  - screen
+  - tmux
+  - none
+
+termulti_packages:
+  all:
+    - byobu
+    - screen
+    - tmux
+  byobu:
+    - byobu
+    - screen
+    - tmux
+  tmux:
+    - tmux
+  screen:
+    - screen
+  none:
+
+termulti_configuration:
+  all:
+    - .byobu
+    - .tmux.conf
+    - .screenrc
+  byobu:
+    - .byobu
+  tmux:
+    - .tmux.conf
+  screen:
+    - .screenrc
+  none:
+
+termulti_shfile:
+  all:
+    - byobu
+    - tmux
+    - screen
+  byobu:
+    - byobu
+  tmux:
+    - tmux
+  screen:
+    - screen
+  none:
+

@@ -1,0 +1,45 @@
+---
+- name: Install default editor if defined
+  tags:
+    - install_packages
+    - packages
+    - editing
+  become: yes
+  apt:
+    name: '{{ default_editor }}'
+  when: default_editor is defined
+
+- name: Set default cli editor if defined
+  tags:
+    - packages
+    - alternatives
+    - editing
+    - cli
+  become: yes
+  alternatives:
+    name: editor
+    path: "{{ default_editor_path }}"
+  when: default_editor_path is defined
+
+- name: Get home dirs for a cli_editor_users
+  getent:
+    database: passwd
+    key: '{{ item }}'
+    split: ':'
+  loop: "{{ cli_editor_users }}"
+  register: cli_editor_users_home
+  when: cli_editor_users is defined
+
+- name: Copy .vimrc to cli_editor_users homes if defined
+  become: yes
+  tags:
+    - editing
+    - cli
+  copy:
+    src: vimrc
+    dest: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.vimrc"
+    owner: "{{ item.item }}"
+    group: "{{ item['ansible_facts']['getent_passwd'][item.item][2] }}"
+    mode: 0644
+  when: (item['ansible_facts']['getent_passwd'] is defined) and (default_editor == "vim-nox")
+  loop: "{{ cli_editor_users_home.results }}"

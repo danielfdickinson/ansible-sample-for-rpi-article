@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: True
+  tasks:
+    - import_tasks: tasks-os_variance.yml
+
+- hosts: os_family_debian
+  gather_facts: False
+  tags:
+    - class_os_family_debian
+  roles:
+    - os_family_debian_pre
+

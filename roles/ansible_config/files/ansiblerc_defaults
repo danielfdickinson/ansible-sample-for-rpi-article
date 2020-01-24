@@ -1,0 +1,6 @@
+[defaults]
+ask_vault_pass = True
+inject_facts_as_vars = False
+log_path = /var/log/ansible/ansible.log
+nocows = 1
+fact_caching = memory

@@ -1,0 +1,81 @@
+---
+- name: Install Ansible control environment
+  become: yes
+  tags:
+    - install_packages
+    - packages
+    - oneoff
+    - ansible_editing
+    - ansible_testing
+    - ssh
+  block:
+    - name: Install Ansible editing/testing packages
+      apt:
+        name:
+          - ansible
+          - ansible-lint
+          - keychain
+          - git-core
+          - git-doc
+          - git-email
+          - patch
+          - quilt
+
+    - name: Get home dirs for ansible control users
+      getent:
+        database: passwd
+        key: '{{ item }}'
+        split: ':'
+      loop: "{{ [ ansible_control_user_name ] }}"
+      register: ansible_control_users_home_shrc
+
+    - name: Add ansible shrc envvars snippet as appropriate
+      tags:
+        - cli
+        - bashrc
+      blockinfile:
+        path: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.{{ shrc_type }}"
+        block: "{{ lookup('file', 'shrc_ansible_envvars') }}"
+        insertafter: EOF
+        marker: "# {mark} ANSIBLE MANAGED ANSIBLE ENVVARS BLOCK"
+        state: present
+      when: item['ansible_facts']['getent_passwd'] is defined
+      loop: "{{ ansible_control_users_home_shrc.results }}"
+
+    - name: Add ansible config file snippet as appropriate
+      tags:
+        - cli
+        - bashrc
+      blockinfile:
+        path: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.ansiblerc"
+        block: "{{ lookup('file', 'ansiblerc_defaults') }}"
+        owner: "{{ item.item }}"
+        group: "{{ item['ansible_facts']['getent_passwd'][item.item][2] }}"
+        mode: 0600
+        insertafter: '[defaults]'
+        create: yes
+        marker: "# {mark} ANSIBLE MANAGED ANSIBLE CONFIG FILE DEFAULTS BLOCK"
+        state: present
+      when: item['ansible_facts']['getent_passwd'] is defined
+      loop: "{{ ansible_control_users_home_shrc.results }}"
+
+    - name: Add ansible log directory writable by ansible control user
+      file:
+        path: "/var/log/ansible"
+        state: directory
+        owner: "{{ ansible_control_user_name }}"
+        group: adm
+        mode: 0750
+        follow: no
+        force: no
+
+    - name: Add ansible logrotate file
+      copy:
+        src: ansible_logrotate
+        dest: "/etc/logrotate.d/ansible"
+        owner: root
+        group: root
+        mode: 0644
+        follow: no
+        force: no
+

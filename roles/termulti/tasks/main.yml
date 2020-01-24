@@ -1,0 +1,73 @@
+---
+- name: Install and configure termulti choice
+  when: termulti_choice in termulti_choices
+  become: yes
+  block:
+
+    - name: Get home dirs for termulti_users
+      getent:
+        database: passwd
+        key: '{{ item }}'
+        split: ':'
+      loop: "{{ termulti_users }}"
+      register: termulti_users_home
+
+    - name: Add/Remove termulti packages
+      tags:
+        - packages
+        - cli
+      block:
+        - name: Remove unused termulti packages
+          apt:
+            name: "{{ termulti_packages['all'] | difference(termulti_packages[termulti_choice]) }}"
+            state: absent
+
+        - name: Add termulti packages
+          apt:
+            name: "{{ termulti_packages[termulti_choice] }}"
+            state: present
+
+    - name: Add/Remove termulti configuration
+      tags:
+        - configuration
+        - cli
+      block:
+        - name: Remove 'other' termulti configuration
+          file:
+            path: "{{ item.0.value.4 }}/{{ item.1 }}"
+            state: absent
+            follow: no
+          loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items  | product( termulti_configuration['all'] | difference(termulti_configuration[termulti_choice]) ) | list }}"
+
+        - name: Remove termulti sh_file snippets as appropriate
+          blockinfile:
+            path: "{{ item.0.value.4 }}/.{{ shrc_type }}"
+            block: "{{ lookup('file', 'sh_files/' + item.1) }}"
+            insertafter: EOF
+            marker: "# {mark} ANSIBLE MANAGED TERMULTI {{ item.1 | upper }}  BLOCK"
+            state: absent
+          when: termulti_users_home.results is defined
+          loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items  | product( termulti_shfile['all'] | difference(termulti_shfile[termulti_choice]) ) | list }}"
+
+        - name: Add selected termulti configuration
+          copy:
+            src: "conf/{{ item.1 }}"
+            dest: "{{ item.0.value.4 }}/{{ item.1 }}"
+            owner: "{{ item.0.key }}"
+            group: "{{ item.0.value.2 }}"
+            directory_mode: 0755
+            mode: preserve
+            local_follow: no
+            force: no
+          loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items  | product( termulti_configuration[termulti_choice]) | list }}"
+
+        - name: Add termulti sh_file snippets as appropriate
+          blockinfile:
+            path: "{{ item.0.value.4 }}/.{{ shrc_type }}"
+            block: "{{ lookup('file', 'sh_files/' + item.1) }}"
+            insertafter: EOF
+            state: present
+            marker: "# {mark} ANSIBLE MANAGED TERMULTI {{ item.1 | upper }}  BLOCK"
+          when: termulti_users_home.results is defined
+          loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items  | product( termulti_shfile[termulti_choice]) | list }}"
+

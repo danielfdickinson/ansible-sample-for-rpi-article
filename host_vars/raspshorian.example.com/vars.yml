@@ -1,0 +1,17 @@
+---
+ansible_become_pass: '{{ vault_ansible_become_pass }}'
+admin_user_password: '{{ vault_admin_user_password }}'
+ansible_client_user_password: '{{ vault_ansible_client_user_password }}'
+ansible_control_user_name: 'ansible'
+ansible_control_user_comment: 'Ansible Control User'
+ansible_control_gid: 2000
+ansible_control_uid: 2000
+ansible_control_user_password: '{{ vault_ansible_control_user_password }}'
+ansible_control_user_home: '/var/local/ansible'
+ansible_control_ssh_passphrase: '{{ vault_ansible_control_ssh_passphrase }}'
+include_ansible_control_environment: True
+cli_users:
+  - '{{ admin_user_name }}'
+  - '{{ ansible_control_user_name }}'
+keychain_users:
+  - '{{ ansible_control_user_name }}'

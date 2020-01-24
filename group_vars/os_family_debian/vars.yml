@@ -1,0 +1,13 @@
+---
+os_family_level_desktop_groups:
+  - dialout
+  - cdrom
+  - video
+  - plugdev
+  - input
+os_family_desktop_groups: '{{ os_family_level_desktop_groups | union(os_distro_desktop_groups) | union(os_family_major_desktop_groups) }}'
+
+os_family_level_groups:
+  - users
+
+os_family_groups: '{{ os_family_level_groups | union(os_distro_groups) | union(os_lsb_distro_groups) | union(os_family_major_groups) }}'

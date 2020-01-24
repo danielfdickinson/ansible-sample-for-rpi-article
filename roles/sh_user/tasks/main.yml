@@ -1,0 +1,41 @@
+---
+- name: Add __shrc snippets as appropriate
+  tags:
+    - cli
+    - bashrc
+  become: yes
+  block:
+    - name: Get home dirs for keychain users
+      getent:
+        database: passwd
+        key: '{{ item }}'
+        split: ':'
+      loop: "{{ keychain_users }}"
+      register: keychain_users_home
+
+    - name: Add keychain snippet as appropriate
+      blockinfile:
+        path: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.{{ shrc_type }}"
+        block: "{{ lookup('file', 'home_files/keychain') }}"
+        insertafter: EOF
+        marker: "# {mark} ANSIBLE MANAGED KEYCHAIN BLOCK"
+      when: item['ansible_facts']['getent_passwd'] is defined
+      loop: "{{ keychain_users_home.results }}"
+
+    - name: Get home dirs for safefiles users
+      getent:
+        database: passwd
+        key: '{{ item }}'
+        split: ':'
+      loop: "{{ safefile_users }}"
+      register: safefile_users_home
+
+    - name: Add safefile snippet as appropriate
+      blockinfile:
+        path: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.{{ shrc_type }}"
+        block: "{{ lookup('file', 'home_files/safefile') }}"
+        insertafter: EOF
+        marker: "# {mark} ANSIBLE MANAGED SAFEFILE BLOCK"
+      when: item['ansible_facts']['getent_passwd'] is defined
+      loop: "{{ safefile_users_home.results }}"
+

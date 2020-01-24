@@ -1,0 +1,10 @@
+syntax on
+" switch last search hilight off
+if &t_Co > 2 || has("gui_running")
+  command Chl let @/=""
+  highlight ExtraWhitespace ctermbg=red guibg=red
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
+  autocmd Syntax * syn match ExtraWhitespace /\( \{8\}\)\+\ze[^\s]/ containedin=ALL
+  autocmd Syntax * syn match ExtraWhitespace /\s*\/\/.*\(\s\s*\)$/ containedin=ALL
+  autocmd Syntax * syn match ExtraWhitespace /\(\s#\|\s\)\+$/ containedin=ALL
+endif

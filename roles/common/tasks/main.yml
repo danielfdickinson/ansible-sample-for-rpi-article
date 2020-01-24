@@ -1,0 +1,13 @@
+---
+- name: Install useful system tools
+  become: yes
+  tags:
+    - package_install
+    - packages
+  apt:
+    name:
+      - etckeeper
+      - iotop
+
+- import_tasks: admin_user.yml
+- import_tasks: ansible_client.yml

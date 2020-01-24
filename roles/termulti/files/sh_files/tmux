@@ -1,0 +1,48 @@
+ask_session() {
+    OLDNEW=
+    while [ "$OLDNEW" != "n" ] && [ "$OLDNEW" != "o" ]; do
+	echo "New Session or Old Session (n/o)"
+	read OLDNEW
+    done
+    if [ "$OLDNEW" = "n" ]; then
+	tmux new-session
+    else
+	tmux attach-session
+    fi
+}
+
+# tmux doesn't like physical console
+if case "$(readlink /proc/self/fd/0)" in */tty*[0-9]*) false ;; */console) false ;; *) true ;; esac; then
+	if [ -x /usr/bin/tmux ] && [ "$LC_BYOBU" != "0" ] && [ "$INSCREEN" != "true" ] && [ ! -e $HOME/.tmux-disabled ] ; then
+		case "$TERM" in
+		dumb | \
+		eterm*)
+			;;
+		screen*)
+			if [ "$LC_BYOBU" != "0" ]; then
+				INSCREEN=true
+				export INSCREEN
+				if [[ "$LC_BYOBU" -gt 0 ]]; then
+					LC_BYOBU=$((LC_BYOBU - 1))
+					export LC_BYOBU
+				fi
+				if tmux has-session; then
+					ask_session
+				else
+					tmux new-session
+				fi
+				exit 0
+			fi
+			;;
+		*)
+			INSCREEN=true
+			export INSCREEN
+			if tmux has-session; then
+				ask_session
+			else
+				tmux new-session
+			fi
+			exit 0
+		esac
+	fi
+fi

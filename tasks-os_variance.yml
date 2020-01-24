@@ -1,0 +1,34 @@
+---
+- name: Classify hosts depending on their OS family
+  group_by:
+    key: "os_family_{{ ansible_facts['os_family'] | lower }}"
+  tags:
+    - classify_hosts
+    - class_os_family
+
+- name: Classify hosts depending on their OS distro
+  group_by:
+    key: "os_distro_{{ ansible_facts['distribution'] | lower }}"
+    parents:
+      - "os_family_{{ ansible_facts['os_family'] | lower }}"
+  tags:
+    - classify_hosts
+    - class_os_distro
+
+- name: Classify hosts depending on their OS family and LSB distro (ID)
+  group_by:
+    key: "os_lsb_distro_{{ ansible_facts['lsb']['id'] | lower }}"
+    parents:
+      - "os_family_{{ ansible_facts['os_family'] | lower }}"
+  tags:
+    - classify_hosts
+    - class_lsb_distro
+
+- name: Classify hosts depending on their OS family and major version
+  group_by:
+    key: "os_family_{{ ansible_facts['os_family'] | lower }}_major_{{ ansible_facts['distribution_major_version'] }}"
+    parents:
+      - "os_family_{{ ansible_facts['os_family'] | lower }}"
+  tags:
+    - classify_hosts
+    - class_os_family_major

@@ -1,0 +1,4 @@
+if [ -n "$(command -v keychain 2>/dev/null)" ]; then
+	eval "$(keychain --eval --inherit local-once --noask --timeout 60)"
+fi
+
