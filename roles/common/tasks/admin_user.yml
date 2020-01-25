@@ -32,5 +32,5 @@
       authorized_key:
         user: "{{ admin_user_name }}"
         state: present
-        key: "{{ lookup('first_found', admin_user_public_key) }}"
+        key: "{{ lookup('file', lookup('first_found', admin_user_public_key)) }}"
         exclusive: True

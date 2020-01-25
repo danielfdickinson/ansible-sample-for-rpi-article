@@ -22,5 +22,6 @@
     - ansible_editing
     - ansible_testing
     - ssh
-- import_tasks: ansible_user.yml
+  block:
+    - import_tasks: ansible_user.yml
   when: include_ansible_control_environment

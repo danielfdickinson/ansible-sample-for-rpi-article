@@ -47,7 +47,7 @@
         - cli
         - bashrc
       blockinfile:
-        path: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.ansiblerc"
+        path: "{{ item['ansible_facts']['getent_passwd'][item.item][4] }}/.ansible.cfg"
         block: "{{ lookup('file', 'ansiblerc_defaults') }}"
         owner: "{{ item.item }}"
         group: "{{ item['ansible_facts']['getent_passwd'][item.item][2] }}"

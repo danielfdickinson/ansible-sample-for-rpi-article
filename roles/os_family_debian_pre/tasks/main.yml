@@ -1,5 +1,5 @@
 ---
-- name: Install important admin tools for ansible
+- name: Install important admin tools
   become: yes
   tags:
     - class_os_family_debian
