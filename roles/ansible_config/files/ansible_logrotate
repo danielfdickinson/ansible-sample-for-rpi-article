@@ -1,4 +1,4 @@
-/var/log/ansible/ansible.log
+/var/log/ansible/ansible.log {
         size 10M
         missingok
         rotate 7
