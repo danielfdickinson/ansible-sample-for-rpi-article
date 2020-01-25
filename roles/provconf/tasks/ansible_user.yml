@@ -69,5 +69,5 @@
   authorized_key:
     user: "{{ ansible_control_user_name }}"
     state: present
-    key: "{{ lookup('first_found', ansible_control_user_public_keys) }}"
+    key: "{{ lookup('file', lookup('first_found', ansible_control_user_public_keys)) }}"
     exclusive: True

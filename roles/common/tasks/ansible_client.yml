@@ -27,11 +27,11 @@
     - name: Configure SSH authorized keys for ansible-client user
       vars:
         ansible_client_public_key:
-          - "{{ ansible_control_user_home }}/.ssh/id_ed25519"
           - "public_keys/ansible_client_user"
+          - "{{ ansible_control_user_home }}/.ssh/id_ed25519.pub"
       authorized_key:
         user: "{{ ansible_client_user_name }}"
         state: present
-        key: "{{ lookup('first_found', ansible_client_public_key) }}"
+        key: "{{ lookup('file', lookup('first_found', ansible_client_public_key)) }}"
         exclusive: True
 
