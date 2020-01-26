@@ -6,7 +6,6 @@
     - packages
   apt:
     name:
-      - etckeeper
       - iotop
 
 - import_tasks: admin_user.yml
