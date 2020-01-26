@@ -9,5 +9,4 @@
     name:
       - aptitude
       - rsync
-      - unattended-upgrades
     state: present
