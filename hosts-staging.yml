@@ -1,7 +1,7 @@
 ---
 all:
   children:
-     provconf:
+     ansible_config:
        hosts:
          raspshorian.example.com
      resources_low:

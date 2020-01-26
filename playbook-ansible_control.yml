@@ -1,12 +1,12 @@
 ---
 - import_playbook: playbook-common.yml
 
-- hosts: provconf
+- hosts: ansible_control
   gather_facts: False
   tags:
     - oneoff
   roles:
-    - provconf
+    - ansible_control
     - ansible_config
     - common
     - role: sh_user

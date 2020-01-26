@@ -1,2 +1,2 @@
 ---
-- import_playbook: playbook-provconf.yml
+- import_playbook: playbook-ansibe_config.yml
