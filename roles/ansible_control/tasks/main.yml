@@ -32,7 +32,7 @@
         state: present
       notify:
         - Copy files from ansible control user dir under /home to new (if different)
-    
+
     - name: Configure permissions on ansible control home directory
       become: yes
       tags:
@@ -45,7 +45,7 @@
         mode: 0700
         owner: "{{ ansible_control_user_name }}"
         group: "{{ ansible_control_user_name }}"
-    
+
     - name: Configure ownership on files/dirs in ansible control home directory
       become: yes
       tags:
@@ -58,7 +58,7 @@
         owner: "{{ ansible_control_user_name }}"
         group: "{{ ansible_control_user_name }}"
         recurse: yes
-    
+
     - name: Configure SSH authorized keys for ansible_control user
       become: yes
       tags:

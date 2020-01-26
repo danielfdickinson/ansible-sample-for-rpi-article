@@ -47,7 +47,7 @@
             marker: "# {mark} ANSIBLE MANAGED TERMULTI {{ item.1 | upper }}  BLOCK"
             state: absent
           when: termulti_users_home.results is defined
-          loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items  | product( termulti_shfile['all'] | difference(termulti_shfile[termulti_choice]) ) | list }}"
+          loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items | product( termulti_shfile['all'] | difference(termulti_shfile[termulti_choice]) ) | list }}"
 
         - name: Add selected termulti configuration
           copy:
@@ -70,4 +70,3 @@
             marker: "# {mark} ANSIBLE MANAGED TERMULTI {{ item.1 | upper }}  BLOCK"
           when: termulti_users_home.results is defined
           loop: "{{ termulti_users_home.results | json_query('[*].ansible_facts.getent_passwd') | combine() | dict2items  | product( termulti_shfile[termulti_choice]) | list }}"
-
