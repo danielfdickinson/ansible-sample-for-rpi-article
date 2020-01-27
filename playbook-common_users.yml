@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: False
+  tags:
+    - common
+    - common_users
+  roles:
+    - common_users
+    - role: sh_user
+      when: sh_users is defined
+    - role: termulti
+      when: termulti_users is defined
+    - role: cli_editing
+      when: cli_editor_users is defined

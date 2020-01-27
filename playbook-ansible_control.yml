@@ -1,18 +1,10 @@
 ---
-- import_playbook: playbook-common.yml
-
 - hosts: ansible_control
   gather_facts: False
   tags:
-    - oneoff
+    - playbook_ansible_control
+    - ansible_control
+    - ansible_config
   roles:
     - ansible_control
     - ansible_config
-    - common
-    - role: sh_user
-      when: sh_users is defined
-    - role: termulti
-      when: termulti_users is defined
-    - role: cli_editing
-      when: cli_editor_users is defined
-

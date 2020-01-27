@@ -1,2 +1,8 @@
 ---
-- import_playbook: playbook-ansibe_config.yml
+# Common to all hosts before users are created
+- import_playbook: playbook-common_pre.yml
+
+- import_playbook: playbook-ansible_control.yml
+
+# Common to all host after users are created
+- import_playbook: playbook-common_users.yml

@@ -11,3 +11,10 @@
   roles:
     - os_family_debian_pre
 
+- hosts: all
+  gather_facts: False
+  tags:
+    - common
+    - common_pre
+  roles:
+    - common_pre
