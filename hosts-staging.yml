@@ -1,7 +1,7 @@
 ---
 all:
   children:
-     ansible_config:
+     ansible_control:
        hosts:
          raspshorian.example.com
      resources_low:
