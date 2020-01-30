@@ -7,7 +7,7 @@ ansible_control_user_comment: 'Ansible Control User'
 ansible_control_gid: 2000
 ansible_control_uid: 2000
 ansible_control_user_password: '{{ vault_ansible_control_user_password }}'
-ansible_control_user_home: '/var/local/ansible'
+ansible_control_user_home: '/home/ansible'
 ansible_control_ssh_passphrase: '{{ vault_ansible_control_ssh_passphrase }}'
 include_ansible_control_environment: True
 cli_users:
