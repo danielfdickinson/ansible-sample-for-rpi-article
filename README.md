@@ -1,6 +1,6 @@
 # Ansible Sample for RPi Article
 
-Copyright (C) 2020 Daniel F. Dickinson <cshored@thecshore.com>
+Copyright (C) 2020 Daniel F. Dickinson
 
 ## Overview
 
