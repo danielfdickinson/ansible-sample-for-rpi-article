@@ -2,6 +2,11 @@
 
 Copyright (C) 2020 Daniel F. Dickinson
 
+## ARCHIVED
+
+This archive is not longer maintained and may contain information
+that is out-of-date or simply wrong. Use at your own risk.
+
 ## Overview
 
 This Ansible sample repository demonstrates the use of Ansible to
